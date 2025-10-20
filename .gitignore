@@ -1,13 +1,19 @@
+# Build
 target/
 *.class
-*.log
 *.jar
-*.war
-*.ear
-.settings/
-.mvn/
+*.log
+
+# IDE/Tooling
+.idea/
 .project
 .classpath
-.idea/
-*.iml
-*.swp
+.settings/
+.mvn/
+.vscode/
+
+# Temp/OS
+*.tmp
+*.bak
+.DS_Store
+Thumbs.db
