@@ -20,19 +20,19 @@ public class DBTest_Demo {
         int offset = 0;
         if (args.length == 1) { try { offset = Integer.parseInt(args[0]); } catch (Exception ignore) {} }
 
-        String sql = "SELECT DATE_ADD(NOW(), INTERVAL ? HOUR)"; 
-        try (Connection conn = DriverManager.getConnection(JDBC_URL, USER, PASS); 
-             PreparedStatement ps = conn.prepareStatement(sql)) { 
-            ps.setInt(1, offset); 
-            try (ResultSet rs = ps.executeQuery()) { 
-                if (rs.next()) { 
-                    System.out.println(offset + " hour(s) ahead of MySQL on " + HOST + " is: " + rs.getString(1)); 
-                } 
-            } 
-            System.out.println("MYSQL Connection Successful (Localhost Level 1)"); 
-        } catch (Exception e) { 
-            System.err.println("MySQL connection/query failed: " + e.getMessage()); 
-            System.out.println("mysql DB connection fail"); 
-        } 
+        String sql = "SELECT DATE_ADD(NOW(), INTERVAL ? HOUR)";
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, USER, PASS);
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, offset);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    System.out.println(offset + " hour(s) ahead of MySQL on " + HOST + " is: " + rs.getString(1));
+                }
+            }
+            System.out.println("MYSQL Connection Successful (Localhost Level 1)");
+        } catch (Exception e) {
+            System.err.println("MySQL connection/query failed: " + e.getMessage());
+            System.out.println("mysql DB connection fail");
+        }
     }
 }
