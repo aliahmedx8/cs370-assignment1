@@ -2,7 +2,7 @@ import java.sql.*;
 
 public class DBTest_Demo {
     // Level 3 — Windows laptop to Server PUBLIC IP (No SSL)
-    private static final String HOST = "18.189.21.239"; // Server public IP
+    private static final String HOST = "18.189.21.239"; // <-- Server PUBLIC IP
     private static final String DB = "SE";
     private static final String USER = "SE";
     private static final String PASS = "SE2020";
