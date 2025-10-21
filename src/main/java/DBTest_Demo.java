@@ -1,8 +1,8 @@
 import java.sql.*;
 
 public class DBTest_Demo {
-    // Level 2 — Same VPC (No SSL)
-    private static final String HOST = "172.31.26.28"; // Server private IP
+    // Level 3 — Windows laptop to Server PUBLIC IP (No SSL)
+    private static final String HOST = "18.189.21.239"; // <-- Server PUBLIC IP
     private static final String DB = "SE";
     private static final String USER = "SE";
     private static final String PASS = "SE2020";
@@ -15,7 +15,7 @@ public class DBTest_Demo {
             + "&connectTimeout=5000&socketTimeout=5000";
 
     public static void main(String[] args) {
-        System.out.println("Example for MYSQL DB connection via Java (Level 2: Same VPC, No SSL)");
+        System.out.println("Example for MYSQL DB connection via Java (Level 3: Laptop \u2192 Public IP, No SSL)");
         int offset = 0;
         if (args.length == 1) {
             try {
@@ -32,7 +32,7 @@ public class DBTest_Demo {
                     System.out.println(offset + " hour(s) ahead of MySQL on " + HOST + " is: " + rs.getString(1));
                 }
             }
-            System.out.println("MYSQL Connection Successful (Level 2: Same VPC, No SSL)");
+            System.out.println("MYSQL Connection Successful (Level 3: Laptop \u2192 Public IP, No SSL)");
         } catch (Exception e) {
             System.err.println("MySQL connection/query failed: " + e.getMessage());
             System.out.println("mysql DB connection fail");
