@@ -1,4 +1,3 @@
-# Build
 target/
 *.class
 *.jar
