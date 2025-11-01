@@ -1,8 +1,8 @@
 import java.sql.*;
 
 public class DBTest_Demo {
-    // Level 1 — Localhost on Server EC2 (No SSL)
-    private static final String HOST = "127.0.0.1"; // MySQL on same box
+    // Level 1 — Localhost (Server EC2, No SSL)
+    private static final String HOST = "127.0.0.1";
     private static final String DB   = "SE";
     private static final String USER = "SE";
     private static final String PASS = "SE2020";
