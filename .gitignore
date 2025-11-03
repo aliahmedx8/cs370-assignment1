@@ -12,6 +12,3 @@ target/
 *.bak
 .DS_Store
 Thumbs.db
-# keep secrets out of git (safe for L4 later)
-*.pem
-*.key
