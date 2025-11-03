@@ -12,3 +12,5 @@ target/
 *.bak
 .DS_Store
 Thumbs.db
+*.pem
+*.key
