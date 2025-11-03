@@ -2,6 +2,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+
   <groupId>DB-V1.0</groupId>
   <artifactId>DBTest</artifactId>
   <version>0.0.1-SNAPSHOT</version>
@@ -32,6 +33,7 @@
           <target>17</target>
         </configuration>
       </plugin>
+
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <version>3.6.0</version>
@@ -39,19 +41,19 @@
           <execution>
             <phase>package</phase>
             <goals><goal>single</goal></goals>
+            <configuration>
+              <descriptorRefs>
+                <descriptorRef>jar-with-dependencies</descriptorRef>
+              </descriptorRefs>
+              <archive>
+                <manifest>
+                  <addClasspath>true</addClasspath>
+                  <mainClass>DBTest_Demo</mainClass>
+                </manifest>
+              </archive>
+            </configuration>
           </execution>
         </executions>
-        <configuration>
-          <descriptorRefs>
-            <descriptorRef>jar-with-dependencies</descriptorRef>
-          </descriptorRefs>
-          <archive>
-            <manifest>
-              <addClasspath>true</addClasspath>
-              <mainClass>DBTest_Demo</mainClass>
-            </manifest>
-          </archive>
-        </configuration>
       </plugin>
     </plugins>
   </build>

@@ -1,66 +1,56 @@
-import java.io.File;
 import java.sql.*;
 
 public class DBTest_Demo {
-    // Server & DB
-    private static final String HOST = "18.189.21.239"; // Server PUBLIC IP
+    // ===== Level 4 — WAN + TLS (VERIFY_CA) =====
+    // If you change server IP or hostname, update HOST below.
+    private static final String HOST = "18.189.21.239"; // MySQL server public IP (EC2)
     private static final String DB   = "SE";
     private static final String USER = "SE";
     private static final String PASS = "SE2020";
 
-    // Truststore (we'll create ca-truststore.p12 next)
-    private static final String TRUSTSTORE_PATH = "C:/cs370-assignment1/certs/ca-truststore.p12";
+    // Option A: carry truststore in the JDBC URL (no -D flags needed)
+    // Windows path must be file:/ and forward slashes:
+    private static final String TRUSTSTORE_URL =
+        "file:/C:/Users/iqbal/.ssh/mysql-truststore.jks";
     private static final String TRUSTSTORE_PASS = "changeit";
-    private static final String TRUSTSTORE_TYPE = "PKCS12";
 
-    // JDBC URL (set both VERIFY_CA and explicit truststore URL/Type/Pass)
+    // VERIFY_CA = verify server cert is signed by your CA
+    // (Use VERIFY_IDENTITY if you also want hostname verification of 'HOST')
     private static final String JDBC_URL =
         "jdbc:mysql://" + HOST + ":3306/" + DB
       + "?useUnicode=true&characterEncoding=utf8"
       + "&serverTimezone=UTC"
-      + "&enabledTLSProtocols=TLSv1.3,TLSv1.2"
+      + "&enabledTLSProtocols=TLSv1.2,TLSv1.3"
       + "&sslMode=VERIFY_CA"
-      + "&trustCertificateKeyStoreUrl=file:///" + TRUSTSTORE_PATH.replace("\\", "/")
-      + "&trustCertificateKeyStorePassword=" + TRUSTSTORE_PASS
-      + "&trustCertificateKeyStoreType=" + TRUSTSTORE_TYPE
-      + "&allowPublicKeyRetrieval=false"
-      + "&connectTimeout=8000&socketTimeout=8000";
+      + "&allowPublicKeyRetrieval=true"
+      + "&trustCertificateKeyStoreUrl=" + TRUSTSTORE_URL
+      + "&trustCertificateKeyStorePassword=" + TRUSTSTORE_PASS;
 
     public static void main(String[] args) {
-        // Programmatic JVM truststore too (belt + suspenders)
-        System.setProperty("javax.net.ssl.trustStore", TRUSTSTORE_PATH);
-        System.setProperty("javax.net.ssl.trustStorePassword", TRUSTSTORE_PASS);
-        System.setProperty("javax.net.ssl.trustStoreType", TRUSTSTORE_TYPE);
+        System.out.println("Example for MYSQL DB connection via Java (Level 4: WAN, SSL/TLS)");
 
-        // Optional: sanity echo so you can see what file it's using
-        File f = new File(TRUSTSTORE_PATH);
-        System.out.println("Truststore exists=" + f.exists() + " size=" + (f.exists() ? f.length() : 0));
+        int offset = 0;
+        if (args.length == 1) {
+            try { offset = Integer.parseInt(args[0]); } catch (Exception ignore) {}
+        }
 
-        System.out.println("Example for MYSQL DB connection via Java (Level 4: WAN with SSL/TLS)");
-        System.out.println("TLS mode: VERIFY_CA (PKCS12 truststore)");
-
-        final String sql = "SELECT CONCAT('TLS OK @ ', NOW(), ' (server: ', @@hostname, ')')";
+        String sql = "SELECT DATE_ADD(NOW(), INTERVAL ? HOUR)";
 
         try (Connection conn = DriverManager.getConnection(JDBC_URL, USER, PASS);
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
+            ps.setInt(1, offset);
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) System.out.println(rs.getString(1));
-            }
-
-            try (Statement st = conn.createStatement()) {
-                try (ResultSet r1 = st.executeQuery("SHOW STATUS LIKE 'Ssl_version'")) {
-                    if (r1.next()) System.out.println("SSL Version: " + r1.getString(2));
-                }
-                try (ResultSet r2 = st.executeQuery("SHOW STATUS LIKE 'Ssl_cipher'")) {
-                    if (r2.next()) System.out.println("SSL Cipher : " + r2.getString(2));
+                if (rs.next()) {
+                    System.out.println(offset + " hour(s) ahead of MySQL on " + HOST + " is: " + rs.getString(1));
                 }
             }
+            System.out.println("MYSQL Connection Successful (Level 4: WAN, SSL/TLS)");
 
-            System.out.println("MYSQL Connection Successful (Level 4: WAN with SSL/TLS)");
         } catch (Exception e) {
             System.err.println("MySQL connection/query failed: " + e.getMessage());
-            System.out.println("mysql DB connection fail (Level 4)");
+            e.printStackTrace(System.out);
+            System.out.println("mysql DB connection fail");
         }
     }
 }
