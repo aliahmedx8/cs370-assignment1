@@ -12,5 +12,5 @@ target/
 *.bak
 .DS_Store
 Thumbs.db
-certs/*.key
 certs/*.pem
+certs/*.jks
